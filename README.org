@@ -1,0 +1,66 @@
+* writer-mode
+
+THIS IS UNDER DEVELOPMENT
+
+This is a simple and convenient minor mode that might be useful for
+writers.
+
+In order to jump between the outline and the main window, you are given three
+functions:
+
+- =writer-jump-to-outline=: from the main window, jump to the corresponding
+  element from the outline.
+- =writer-jump-from-outline=: from the outline, open up the selected section
+  into the main window.
+- =writer-jump=: it simply calls either of the above functions depending on
+  whether you are on the outline or not. You can bind to this method if you are
+  planning to use the same key chord for both kinds of jumps.
+
+If you are using [[https://github.com/emacs-evil/evil][evil]] mode, then you might find interesting the following
+snippet:
+
+#+BEGIN_SRC elisp
+(define-key evil-normal-state-local-map [return] (quote writer-jump))
+#+END_SRC
+
+** Customize
+
+- =writer-jump-to-first-headline= (default: =t=): it tells
+  =writer-jump-to-outline= to jump into the closest first level headline. If you
+  want to jump into the closest headline (even if it's deeper), then set this to
+  =nil=.
+- =writer-forced= (default =nil=): this mode is disruptive, since it will
+  attempt to delete the rest of the windows. By setting this to =nil=, it will
+  ask the user whether this is really what they want before doing anything at
+  all. If this is set to =t=, then it will always try to start this mode with
+  the currently selected window and buffer without asking.
+
+** To be done for 0.1
+
+- Writeroom support, in a way that it doesn't mess with the previous environment
+  when going back.
+- Take a closer look at scrivener just to check what I could be missing.
+- Have multiple windows (just in case we want to diff). Not completely
+  necessary, and fairly complex to implement, that's why it has been demoted.
+- Think about global mode.
+- Tests.
+- Documentation.
+
+** License
+
+#+BEGIN_SRC text
+Copyright (C) 2019 Miquel Sabaté Solà <mikisabate@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#+END_SRC
