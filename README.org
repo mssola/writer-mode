@@ -1,6 +1,7 @@
 * writer-mode
 
-THIS IS UNDER DEVELOPMENT
+THIS IS UNDER DEVELOPMENT AND EXPERIMENTAL: the tasks to be done are tracked on
+[[https://github.com/mssola/writer-mode/projects/1][this board]].
 
 This is a simple and convenient minor mode that might be useful for
 writers.
@@ -34,17 +35,6 @@ snippet:
   ask the user whether this is really what they want before doing anything at
   all. If this is set to =t=, then it will always try to start this mode with
   the currently selected window and buffer without asking.
-
-** To be done for 0.1
-
-- Writeroom support, in a way that it doesn't mess with the previous environment
-  when going back.
-- Take a closer look at scrivener just to check what I could be missing.
-- Have multiple windows (just in case we want to diff). Not completely
-  necessary, and fairly complex to implement, that's why it has been demoted.
-- Think about global mode.
-- Tests.
-- Documentation.
 
 ** License
 

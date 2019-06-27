@@ -29,7 +29,10 @@
 (require 'org)
 (require 'windmove)
 
-;; Customizable variables.
+;; Global & customizable variables.
+
+(defvar writer--room-available nil
+  "Whether writeroom is available.")
 
 (defcustom writer-jump-to-first-headline t
   "Whether to jump to the first headline or to the closest one.
@@ -50,6 +53,13 @@ given since users might be unaware that this mode is disruptive."
                  (const :tag "Ask first" nil)))
 
 ;; Mode definition.
+
+(defvar writer-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-c w r") #'writer-room)
+    (define-key map (kbd "C-c w q") #'writer-room-quit)
+    map)
+  "Keymap for writer-mode.")
 
 ;;;###autoload
 (define-minor-mode writer-mode
@@ -73,6 +83,10 @@ the clone.  It has largely been taken from
 https://emacs.stackexchange.com/a/9532, which has been written by Dan.
 I've added the integration with `writer-jump-to-first-headline'."
   (interactive)
+
+  ; Quit writeroom-mode if we are in it.
+  (when (bound-and-true-p writeroom-mode)
+    (writer-room-quit))
 
   (let ((buf (buffer-base-buffer)))
     (unless buf
@@ -119,6 +133,41 @@ I've added the integration with `writer-jump-to-first-headline'."
         (writer-jump-to-outline)
       (writer-jump-from-outline))))
 
+;; writeroom integration
+
+(defun writer-room ()
+  "Check some assumptions and enter writeroom-mode."
+  (interactive)
+
+  (unless writer--room-available
+    (error "You have to install writeroom-mode first"))
+  (let ((buf (buffer-base-buffer)))
+    (unless buf
+      (error "You have to be on the main window")))
+  (writeroom-mode 1))
+
+(defun writer--room-force-quit (msg)
+  "Quit writeroom-mode and leave an error message as provided by `MSG'."
+  (writeroom-mode -1)
+  (writer-error-and-disable msg))
+
+(defun writer-room-quit ()
+  "Gracefully quit writeroom-mode and leave things as they were before entering."
+  (interactive)
+
+  (let ((buf (buffer-base-buffer))
+        (cur (current-buffer)))
+    (unless buf
+      (writer--room-force-quit "Could not locate buffer for outline.  Disabling mode"))
+
+    (writeroom-mode -1)
+    (switch-to-buffer buf)
+    (split-window-right)
+    (setq fit-window-to-buffer-horizontally 'only)
+    (fit-window-to-buffer)
+    (windmove-right)
+    (switch-to-buffer cur)))
+
 ;; Enable and disable the mode, and related functions.
 
 (defun writer-go-to-first-heading ()
@@ -151,6 +200,10 @@ I've added the integration with `writer-jump-to-first-headline'."
     (unless writer-forced
         (unless (yes-or-no-p "This will delete the other windows. Are you sure? ")
           (writer-error-and-disable "User refused to start this mode"))))
+
+  (if (require 'writeroom-mode nil t)
+      (setq writer--room-available t)
+    (message "writeroom-mode is not installed, disabling its integration"))
 
   (writer-create-workspace))
 
