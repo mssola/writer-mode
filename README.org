@@ -36,6 +36,14 @@ snippet:
   all. If this is set to =t=, then it will always try to start this mode with
   the currently selected window and buffer without asking.
 
+** Appreciation
+
+Thanks to [[https://github.com/frankjonen][@frankjonen]] for working on [[https://github.com/frankjonen/emacs-for-writers/][Emacs for Writers]]. This mode was developed
+before he released this code, but out of frustration I abandoned this project
+before it was finished. I retook the development for this project after he
+submitted his code, after reconsidering some doubts that I was having. Moreover,
+I also took some ideas from him (e.g. notes section).
+
 ** License
 
 #+BEGIN_SRC text

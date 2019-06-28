@@ -1,4 +1,4 @@
-;;; writer.el --- A minor mode for writers.
+;;; writer-mode --- A minor mode for writers.
 
 ;; Copyright (C) 2019 Miquel Sabaté Solà <mikisabate@gmail.com>
 ;;
@@ -22,12 +22,14 @@
 
 ;;; Commentary:
 ;;
+;; Main file of this mode.
 ;; See README.org for documentation on how to use this minor mode.
 
 ;;; Code:
 
 (require 'org)
 (require 'windmove)
+(require 'writer-notes)
 
 ;; Global & customizable variables.
 
@@ -51,6 +53,14 @@ given since users might be unaware that this mode is disruptive."
   :group 'writer
   :type '(choice (const :tag "Force execution" t)
                  (const :tag "Ask first" nil)))
+
+(defcustom writer-pre-hook nil
+  "Hook run just *before* setting up the environment.
+This hook is called without passing any argument.  Use this this
+hook to add some special values before doing anything at
+all (e.g. a different `line-spacing' than the one given here)"
+  :type 'hook
+  :group 'writer)
 
 ;; Mode definition.
 
@@ -119,10 +129,16 @@ I've added the integration with `writer-jump-to-first-headline'."
   (interactive)
 
   (delete-other-windows)
+  (split-window-right)
   (org-tree-to-indirect-buffer)
-  (setq fit-window-to-buffer-horizontally 'only)
-  (fit-window-to-buffer)
-  (windmove-right))
+  (outline-hide-sublevels 1)
+
+  (dotimes (i 2)
+    (windmove-right)
+    (split-window-right))
+
+  (windmove-right)
+  (writer-notes-init-and-balance))
 
 (defun writer-jump ()
   "Call either `writer-jump-from-outline' or `writer-jump-to-outline'."
@@ -141,9 +157,6 @@ I've added the integration with `writer-jump-to-first-headline'."
 
   (unless writer--room-available
     (error "You have to install writeroom-mode first"))
-  (let ((buf (buffer-base-buffer)))
-    (unless buf
-      (error "You have to be on the main window")))
   (writeroom-mode 1))
 
 (defun writer--room-force-quit (msg)
@@ -157,31 +170,31 @@ I've added the integration with `writer-jump-to-first-headline'."
 
   (let ((buf (buffer-base-buffer))
         (cur (current-buffer)))
-    (unless buf
-      (writer--room-force-quit "Could not locate buffer for outline.  Disabling mode"))
 
+    ; First of all, quit writeroom mode.
     (writeroom-mode -1)
-    (switch-to-buffer buf)
-    (split-window-right)
-    (setq fit-window-to-buffer-horizontally 'only)
-    (fit-window-to-buffer)
-    (windmove-right)
-    (switch-to-buffer cur)))
+
+    ; There are two cases here:
+    ;  1. If we were writing in a cloned buffer, then we have to switch to the
+    ;     base buffer (which is acting as the outline, so we have to hide the
+    ;     sublevels). Afterwards we have to remake the environment and finally
+    ;     switch to the cloned buffer in the middle.
+    ;  2. If this was not a cloned buffer, then we can simply restart the
+    ;     environment from scratch.
+    (if buf
+        (progn
+          (switch-to-buffer buf)
+          (outline-hide-sublevels 1)
+
+          (dotimes (i 3)
+            (split-window-right)
+            (windmove-right))
+
+          (writer-notes-init-and-balance)
+          (switch-to-buffer cur))
+      (writer-notes-create-workspace))))
 
 ;; Enable and disable the mode, and related functions.
-
-(defun writer-go-to-first-heading ()
-  "Move the cursor to the next heading."
-
-  (goto-char (point-min))
-  (outline-next-visible-heading 1))
-
-(defun writer-create-workspace ()
-  "Create the workspace for this minor mode."
-
-  (outline-hide-sublevels 1)
-  (writer-go-to-first-heading)
-  (writer-jump-from-outline))
 
 (defun writer-error-and-disable (msg)
   "Write the given error and disable this mode.
@@ -205,7 +218,24 @@ I've added the integration with `writer-jump-to-first-headline'."
       (setq writer--room-available t)
     (message "writeroom-mode is not installed, disabling its integration"))
 
-  (writer-create-workspace))
+  (writer-setup))
+
+(defun writer-setup ()
+  "Setup the environment.
+This consists of two windows, were the one on the right takes a 1/4 of the total
+available space.  It also sets values to variables such as `line-spacing' and it
+starts olivetti mode with 100 columns."
+
+  (setq line-spacing 3)
+  (flyspell-mode 1)
+  (setq global-hl-line-mode nil)
+  (set-fringe-mode 0)
+
+  (run-hook-with-args writer-pre-hook)
+  (writer-notes-create-workspace)
+  (olivetti-mode 1)
+  (olivetti-set-width 100))
+
 
 (defun writer-delete-other-windows-and-clones ()
   "Delete all the other windows and cloned buffers.
@@ -244,9 +274,12 @@ given buffer will be placed on it."
         (writer-only-window-from-buffer buf)
       (writer-delete-other-windows-and-clones)))
 
-  ; And finally disable for sure.
+  ; Disable for sure.
   (if writer-mode
-      (writer-mode -1)))
+      (writer-mode -1))
+
+  ; And finally kill this buffer. This is safe because all variables are local.
+  (kill-this-buffer))
 
 (provide 'writer)
 
