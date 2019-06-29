@@ -56,9 +56,9 @@ given since users might be unaware that this mode is disruptive."
 
 (defcustom writer-pre-hook nil
   "Hook run just *before* setting up the environment.
-This hook is called without passing any argument.  Use this this
-hook to add some special values before doing anything at
-all (e.g. a different `line-spacing' than the one given here)"
+This hook is called without passing any argument.  Use this hook
+to add some special values before doing anything at all (e.g. a
+different `line-spacing' than the one given here)"
   :type 'hook
   :group 'writer)
 
@@ -66,6 +66,7 @@ all (e.g. a different `line-spacing' than the one given here)"
 
 (defvar writer-mode-map
   (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-c j") #'writer-jump)
     (define-key map (kbd "C-c w r") #'writer-room)
     (define-key map (kbd "C-c w q") #'writer-room-quit)
     map)
@@ -280,6 +281,10 @@ given buffer will be placed on it."
 
   ; And finally kill this buffer. This is safe because all variables are local.
   (kill-this-buffer))
+
+; Setup writer-mode in the [f5] key for org-mode, which is free.
+(with-eval-after-load 'org
+  (define-key org-mode-map [f5] #'writer-mode))
 
 (provide 'writer)
 

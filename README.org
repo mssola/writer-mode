@@ -6,35 +6,27 @@ THIS IS UNDER DEVELOPMENT AND EXPERIMENTAL: the tasks to be done are tracked on
 This is a simple and convenient minor mode that might be useful for
 writers.
 
-In order to jump between the outline and the main window, you are given three
-functions:
+** Usage
 
-- =writer-jump-to-outline=: from the main window, jump to the corresponding
-  element from the outline.
-- =writer-jump-from-outline=: from the outline, open up the selected section
-  into the main window.
-- =writer-jump=: it simply calls either of the above functions depending on
-  whether you are on the outline or not. You can bind to this method if you are
-  planning to use the same key chord for both kinds of jumps.
+TODO: describe workflow, ideas and shortcuts
 
-If you are using [[https://github.com/emacs-evil/evil][evil]] mode, then you might find interesting the following
-snippet:
-
-#+BEGIN_SRC elisp
-(define-key evil-normal-state-local-map [return] (quote writer-jump))
-#+END_SRC
-
-** Customize
+** Configuration
 
 - =writer-jump-to-first-headline= (default: =t=): it tells
   =writer-jump-to-outline= to jump into the closest first level headline. If you
   want to jump into the closest headline (even if it's deeper), then set this to
-  =nil=.
+  =nil=. You can trust this default unless you are doing really weird things
+  with headlines.
 - =writer-forced= (default =nil=): this mode is disruptive, since it will
   attempt to delete the rest of the windows. By setting this to =nil=, it will
   ask the user whether this is really what they want before doing anything at
   all. If this is set to =t=, then it will always try to start this mode with
-  the currently selected window and buffer without asking.
+  the currently selected window and buffer without asking. It's recommended to
+  set it to =t=, but since it's disruptive it doesn't take this value by
+  default.
+- =writer-pre-hook= (default =nil=): hook to be run before setting up the
+  environment. Use this to add some special values before this mode does
+  anything at all (e.g. =line-spacing=).
 
 ** Appreciation
 
