@@ -27,6 +27,9 @@ TODO: describe workflow, ideas and shortcuts
 - =writer-pre-hook= (default =nil=): hook to be run before setting up the
   environment. Use this to add some special values before this mode does
   anything at all (e.g. =line-spacing=).
+- =writer-notes-post-hook= (default =nil=): hook to be run after setting up the
+  the right pane (notes section). Use this to further tune the right section of
+  the workspace (e.g. creating a new window with =dired= mode in it).
 
 ** Appreciation
 

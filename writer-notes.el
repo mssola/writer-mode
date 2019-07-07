@@ -26,6 +26,14 @@
 
 ;;; Code:
 
+(defcustom writer-notes-post-hook nil
+  "Hook run just *after* setting up the notes section.
+This hook is called without passing any argument.  Use this hook
+to further tune the look and feel of the right section (e.g. opening up a new
+window below with dired mode in it)."
+  :type 'hook
+  :group 'writer)
+
 (defun writer-notes-create-workspace ()
   "Create the environment from scratch.
 For that, it assumes that there is only one window on the frame, and it then
@@ -36,6 +44,7 @@ allocates a 1/4 on the right for the notes section."
     (windmove-right))
 
   (writer-notes-init)
+  (run-hook-with-args writer-notes-post-hook)
   (balance-windows)
 
   (dotimes (i 2)
