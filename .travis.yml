@@ -1,3 +1,4 @@
+dist: trusty
 sudo: false
 language: go
 
@@ -13,8 +14,8 @@ env:
     - env: EVM_EMACS=emacs-git-snapshot-travis
 
 install:
-  - git clone https://github.com/rejeep/evm.git $HOME/.evm
-  - export PATH=$HOME/.evm/bin:$PATH
+  - export PATH=/home/travis/.evm/bin:$PATH
+  - git clone https://github.com/rejeep/evm.git /home/travis/.evm
   - evm config path /tmp
   - evm install $EVM_EMACS --use --skip
 

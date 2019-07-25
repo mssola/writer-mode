@@ -229,7 +229,9 @@ starts olivetti mode with 100 columns."
   (setq line-spacing 3)
   (flyspell-mode 1)
   (setq global-hl-line-mode nil)
-  (set-fringe-mode 0)
+  ;; `set-fringe-mode' was introduced in GNU Emacs 25.2 and we should support GNU Emacs 25.1 too.
+  (when (fboundp 'set-fringe-mode)
+    (set-fringe-mode 0))
 
   (run-hook-with-args writer-pre-hook)
   (writer-notes-create-workspace)
