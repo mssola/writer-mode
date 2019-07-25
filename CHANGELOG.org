@@ -1,0 +1,16 @@
+#+STARTUP:showall
+
+* Changelog
+
+** 0.1 (under development)
+
+- Users can make use of the =writer-jump= function in order to create an outline
+  of the current document.
+- There is a note section available. This can be disabled by setting the
+  =writer-notes-hidden= customizable variable. Otherwise, this section can be
+  toggled between shown/hidden by calling the =writer-notes-toggle= (or directly
+  using the =writer-notes-hide= and =writer-notes-show= functions).
+- [[https://github.com/rnkn/olivetti][olivetti]] is an optional dependency, which is going to be enabled automatically
+  by this mode if available.
+- [[https://github.com/joostkremers/writeroom-mode][writeroom-mode]] is an optional dependency, which is going to be picked up by
+  functions such as =writer-room= and =writer-room-quit= if available.

@@ -215,6 +215,8 @@ I've added the integration with `writer-jump-to-first-headline'."
   (if (require 'writeroom-mode nil t)
       (setq writer--room-available t)
     (message "writeroom-mode is not installed, disabling its integration"))
+  (unless (require 'olivetti nil t)
+    (message "olivetti is not installed, disabling its integration"))
 
   (writer-setup))
 

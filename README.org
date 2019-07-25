@@ -1,16 +1,19 @@
+[[https://travis-ci.org/mssola/writer-mode][https://travis-ci.org/mssola/writer-mode.svg?branch=master]]
+
 * writer-mode
 
-THIS IS UNDER DEVELOPMENT AND EXPERIMENTAL: the tasks to be done are tracked on
-[[https://github.com/mssola/writer-mode/projects/1][this board]].
+THIS IS UNDER DEVELOPMENT AND EXPERIMENTAL
 
 This is a simple and convenient minor mode that might be useful for
 writers.
 
 ** Usage
 
-TODO: describe workflow, ideas and shortcuts
+*** TODO: describe workflow, ideas and shortcuts
 
 ** Configuration
+
+*** TODO there are some variables and hooks which are not documented here. This will be done whenever I have something releaseable
 
 - =writer-jump-to-first-headline= (default: =t=): it tells
   =writer-jump-to-outline= to jump into the closest first level headline. If you
@@ -31,6 +34,22 @@ TODO: describe workflow, ideas and shortcuts
   the right pane (notes section). Use this to further tune the right section of
   the workspace (e.g. creating a new window with =dired= mode in it).
 
+** Dependencies
+
+There are two optional dependencies:
+
+- [[https://github.com/rnkn/olivetti][olivetti]]: when installed, it will be enabled automatically by this mode.
+- [[https://github.com/joostkremers/writeroom-mode][writeroom-mode]]: when installed, it will be available by calling its related
+  functions (e.g. =writer-room=).
+
+** Contributing
+
+Read the [[./CONTRIBUTING.org][CONTRIBUTING.org]] file.
+
+** [[https://pbs.twimg.com/media/DJDYCcLXcAA_eIo?format=jpg&name=small][Changelog]]
+
+Read the [[./CHANGELOG.org][CHANGELOG.org]] file.
+
 ** Appreciation
 
 Thanks to [[https://github.com/frankjonen][@frankjonen]] for working on [[https://github.com/frankjonen/emacs-for-writers/][Emacs for Writers]]. This mode was developed
@@ -38,6 +57,10 @@ before he released this code, but out of frustration I abandoned this project
 before it was finished. I retook the development for this project after he
 submitted his code, after reconsidering some doubts that I was having. Moreover,
 I also took some ideas from him (e.g. notes section).
+
+Last but not least, thank you to all the GNU Emacs developers for providing such
+a wonderful tool, and its ecosystem for providing useful packages such as
+[[https://github.com/rnkn/olivetti][olivetti]] or [[https://github.com/joostkremers/writeroom-mode][writeroom-mode]].
 
 ** License
 

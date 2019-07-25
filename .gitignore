@@ -1,0 +1,4 @@
+*~
+*.elc
+writer-mode-autoloads.el
+vendor/*.el
