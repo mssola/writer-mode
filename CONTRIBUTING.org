@@ -8,18 +8,18 @@ This package has a couple of dependencies in order to run tests. These
 dependencies will be picked up directly by the =vendor= make task. You can run
 it by performing:
 
-```
+#+BEGIN_SRC bash
 $ make version
-```
+#+END_SRC
 
 Note though that you should never have to do this, since it will be already done
 by other tasks automatically.
 
 If you want to run everything, just execute:
 
-```
+#+BEGIN_SRC bash
 $ make
-```
+#+END_SRC
 
 This will fetch the dependencies for you and run the style checkers and the unit
 tests, among other things. See the sections below to read more about them.
@@ -29,9 +29,9 @@ tests, among other things. See the sections below to read more about them.
 This package uses [[https://github.com/gonewest818/elisp-lint][elisp-lint]] and [[https://github.com/purcell/package-lint][package-lint]] in order to check the style. You
 can run these checkers by performing:
 
-```
+#+BEGIN_SRC bash
 $ make lint
-```
+#+END_SRC
 
 Note that the =lint= task already calls the =vendor= one, so you don't have to
 fetch these dependencies beforehand, it will be handled for you.
@@ -41,15 +41,15 @@ fetch these dependencies beforehand, it will be handled for you.
 In order to ensure that the git log is as maintainable as possible, the
 [[https://github.com/vbatts/git-validation][git-validation]] tool is used. You can install this tool by running:
 
-```
+#+BEGIN_SRC bash
 $ go get -u github.com/vbatts/git-validation
-```
+#+END_SRC
 
 If you already have this tool installed, then simply perform:
 
-```
+#+BEGIN_SRC bash
 $ make git-validation
-```
+#+END_SRC
 
 Note that if you don't have this tool installed the task will do nothing (it
 will just print a help message). This is done so when running the default make
@@ -60,9 +60,9 @@ task this doesn't interrupt it.
 Unit tests can be found in the [[./t][t]] directory, and they are using [[https://www.gnu.org/software/emacs/manual/html_node/ert/index.html][ERT]]. These tests
 can be simply run by performing:
 
-```
+#+BEGIN_SRC bash
 $ make unit-test
-```
+#+END_SRC
 
 Note that the =unit-test= task already calls the =vendor= one, so you don't have
 to fetch these dependencies beforehand, it will be handled for you.
