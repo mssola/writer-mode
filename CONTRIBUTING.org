@@ -9,7 +9,7 @@ dependencies will be picked up directly by the =vendor= make task. You can run
 it by performing:
 
 #+BEGIN_SRC bash
-$ make version
+$ make vendor
 #+END_SRC
 
 Note though that you should never have to do this, since it will be already done

@@ -10,6 +10,8 @@
   =writer-notes-hidden= customizable variable. Otherwise, this section can be
   toggled between shown/hidden by calling the =writer-notes-toggle= (or directly
   using the =writer-notes-hide= and =writer-notes-show= functions).
+- This mode will be automatically enabled if the given org-mode document
+  has =writer-mode:t= in the =#+PROPERTY= section.
 - [[https://github.com/rnkn/olivetti][olivetti]] is an optional dependency, which is going to be enabled automatically
   by this mode if available.
 - [[https://github.com/joostkremers/writeroom-mode][writeroom-mode]] is an optional dependency, which is going to be picked up by

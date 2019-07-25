@@ -179,8 +179,8 @@ file of the path over and over again, this function expects the caller to pass
 the full path as the NAME."
 
   ;; Kill the buffer containing the notes file. Delete the window always.
-  (if (string= name (buffer-file-name (current-buffer)))
-      (kill-this-buffer))
+  (when (string= name (buffer-file-name (current-buffer)))
+    (kill-this-buffer))
   (delete-window)
 
   ;; It may happen that after deleting the window the cursor jumps to the left sibling. Move back to

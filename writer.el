@@ -33,6 +33,7 @@
 (require 'org)
 (require 'windmove)
 (require 'writer-notes)
+(require 'writer-org)
 
 ;;; Global & customizable variables.
 
@@ -284,6 +285,19 @@ given buffer will be placed on it."
 
   ;; And finally kill this buffer. This is safe because all variables are local.
   (kill-this-buffer))
+
+(defun writer--enable-maybe ()
+  "Enable this mode depending on `writer-org-enable-p'.
+That is, this function will enable this mode if the user set 'writer-mode:t' as
+an 'org-mode' property."
+
+  (when (and (writer-org-enable-p) (not writer-mode))
+    (writer-mode)))
+
+;;; Hooks
+
+;; Automatically enable this mode if there is the org-mode property writer-mode is set to 't'.
+(add-hook 'org-mode-hook 'writer--enable-maybe)
 
 (provide 'writer)
 
