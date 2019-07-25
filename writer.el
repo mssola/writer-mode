@@ -1,6 +1,14 @@
-;;; writer-mode --- A minor mode for writers.
-
+;;; writer.el --- Main file for this mode -*- lexical-binding: t; -*-
+;;
 ;; Copyright (C) 2019 Miquel Sabaté Solà <mikisabate@gmail.com>
+;;
+;; Author: Miquel Sabaté Solà <mikisabate@gmail.com>
+;; Version: 0.1
+;; Package-Requires: ((emacs "25.1"))
+;; Keywords: convenience files wp
+;; URL: https://github.com/mssola/writer-mode
+;;
+;; This file is not part of GNU Emacs.
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -14,12 +22,7 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-;; Author: Miquel Sabaté Solà <mikisabate@gmail.com>
-;; Version: 0.1
-;; Keywords: minor mode writer
-;; URL: https://github.com/mssola/writer-mode
-
+;;
 ;;; Commentary:
 ;;
 ;; Main file of this mode.
@@ -31,7 +34,7 @@
 (require 'windmove)
 (require 'writer-notes)
 
-;; Global & customizable variables.
+;;; Global & customizable variables.
 
 (defvar writer--room-available nil
   "Whether writeroom is available.")
@@ -62,15 +65,7 @@ different `line-spacing' than the one given here)"
   :type 'hook
   :group 'writer)
 
-;; Mode definition.
-
-(defvar writer-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-c j") #'writer-jump)
-    (define-key map (kbd "C-c w r") #'writer-room)
-    (define-key map (kbd "C-c w q") #'writer-room-quit)
-    map)
-  "Keymap for writer-mode.")
+;;; Mode definition.
 
 ;;;###autoload
 (define-minor-mode writer-mode
@@ -84,9 +79,8 @@ different `line-spacing' than the one given here)"
       (writer--enable)
     (writer--disable)))
 
-;; Functions for jumping between windows.
+;;; Functions for jumping between windows.
 
-; Dan from https://emacs.stackexchange.com/a/9532
 (defun writer-jump-to-outline ()
   "Switch to a cloned buffer's base buffer.
 This function will also move the point to the cursor position in
@@ -95,7 +89,7 @@ https://emacs.stackexchange.com/a/9532, which has been written by Dan.
 I've added the integration with `writer-jump-to-first-headline'."
   (interactive)
 
-  ; Quit writeroom-mode if we are in it.
+  ;; Quit writeroom-mode if we are in it.
   (when (bound-and-true-p writeroom-mode)
     (writer-room-quit))
 
@@ -105,23 +99,23 @@ I've added the integration with `writer-jump-to-first-headline'."
     (let ((pos (point))
           (win (car (get-buffer-window-list buf))))
 
-      ; Select the right window and switch to the proper buffer.
+      ;; Select the right window and switch to the proper buffer.
       (if win
           (select-window win)
         (other-window 1)
         (switch-to-buffer buf))
 
-      ; Go to the position as given by the cloned buffer.
+      ;; Go to the position as given by the cloned buffer.
       (goto-char pos)
 
-      ; If we are to jump to a first level headline, hide everything from the
-      ; base and go to the beginning of the line.
+      ;; If we are to jump to a first level headline, hide everything from the
+      ;; base and go to the beginning of the line.
       (when writer-jump-to-first-headline
         (progn
           (outline-hide-sublevels 1)
           (org-beginning-of-line)))
 
-      ; Finally, if the given point is not visible, show the needed context.
+      ;; Finally, if the given point is not visible, show the needed context.
       (when (invisible-p (point))
         (outline-show-branches)))))
 
@@ -134,7 +128,7 @@ I've added the integration with `writer-jump-to-first-headline'."
   (org-tree-to-indirect-buffer)
   (outline-hide-sublevels 1)
 
-  (dotimes (i 2)
+  (dotimes (_ 2)
     (windmove-right)
     (split-window-right))
 
@@ -150,7 +144,7 @@ I've added the integration with `writer-jump-to-first-headline'."
         (writer-jump-to-outline)
       (writer-jump-from-outline))))
 
-;; writeroom integration
+;;; writeroom integration
 
 (defun writer-room ()
   "Check some assumptions and enter writeroom-mode."
@@ -158,11 +152,13 @@ I've added the integration with `writer-jump-to-first-headline'."
 
   (unless writer--room-available
     (error "You have to install writeroom-mode first"))
-  (writeroom-mode 1))
+  (when (fboundp 'writeroom-mode)
+    (writeroom-mode 1)))
 
 (defun writer--room-force-quit (msg)
   "Quit writeroom-mode and leave an error message as provided by `MSG'."
-  (writeroom-mode -1)
+  (when (fboundp 'writeroom-mode)
+    (writeroom-mode -1))
   (writer-error-and-disable msg))
 
 (defun writer-room-quit ()
@@ -172,22 +168,23 @@ I've added the integration with `writer-jump-to-first-headline'."
   (let ((buf (buffer-base-buffer))
         (cur (current-buffer)))
 
-    ; First of all, quit writeroom mode.
-    (writeroom-mode -1)
+    ;; First of all, quit writeroom mode.
+    (when (fboundp 'writeroom-mode)
+      (writeroom-mode -1))
 
-    ; There are two cases here:
-    ;  1. If we were writing in a cloned buffer, then we have to switch to the
-    ;     base buffer (which is acting as the outline, so we have to hide the
-    ;     sublevels). Afterwards we have to remake the environment and finally
-    ;     switch to the cloned buffer in the middle.
-    ;  2. If this was not a cloned buffer, then we can simply restart the
-    ;     environment from scratch.
+    ;; There are two cases here:
+    ;;  1. If we were writing in a cloned buffer, then we have to switch to the
+    ;;     base buffer (which is acting as the outline, so we have to hide the
+    ;;     sublevels). Afterwards we have to remake the environment and finally
+    ;;     switch to the cloned buffer in the middle.
+    ;;  2. If this was not a cloned buffer, then we can simply restart the
+    ;;     environment from scratch.
     (if buf
         (progn
           (switch-to-buffer buf)
           (outline-hide-sublevels 1)
 
-          (dotimes (i 3)
+          (dotimes (_ 3)
             (split-window-right)
             (windmove-right))
 
@@ -212,8 +209,8 @@ I've added the integration with `writer-jump-to-first-headline'."
 
   (when (> (length (window-list)) 1)
     (unless writer-forced
-        (unless (yes-or-no-p "This will delete the other windows. Are you sure? ")
-          (writer-error-and-disable "User refused to start this mode"))))
+      (unless (yes-or-no-p "This will delete the other windows. Are you sure? ")
+        (writer-error-and-disable "User refused to start this mode"))))
 
   (if (require 'writeroom-mode nil t)
       (setq writer--room-available t)
@@ -234,17 +231,19 @@ starts olivetti mode with 100 columns."
 
   (run-hook-with-args writer-pre-hook)
   (writer-notes-create-workspace)
-  (olivetti-mode 1)
-  (olivetti-set-width 100))
+  (when (fboundp 'olivetti-mode)
+    (olivetti-mode 1))
+  (when (fboundp 'olivetti-set-width)
+    (olivetti-set-width 100)))
 
 
 (defun writer-delete-other-windows-and-clones ()
   "Delete all the other windows and cloned buffers.
 Note that this function assumes that we are on a window which contains the base buffer."
 
-  ; Iterate over the rest of the buffer list (we assume that the first one is
-  ; the one that we want to preserve), and remove all buffers that start with
-  ; the name of our current buffer.
+  ;; Iterate over the rest of the buffer list (we assume that the first one is
+  ;; the one that we want to preserve), and remove all buffers that start with
+  ;; the name of our current buffer.
   (let ((buffers (cdr (buffer-list)))
         (prefix (format "%s-" (buffer-name))))
     (while buffers
@@ -253,7 +252,7 @@ Note that this function assumes that we are on a window which contains the base 
           (kill-buffer cur)))
       (setq buffers (cdr buffers))))
 
-  ; All the cloned buffers have been killed, now just delete the other windows.
+  ;; All the cloned buffers have been killed, now just delete the other windows.
   (delete-other-windows))
 
 (defun writer-only-window-from-buffer (buf)
@@ -275,16 +274,12 @@ given buffer will be placed on it."
         (writer-only-window-from-buffer buf)
       (writer-delete-other-windows-and-clones)))
 
-  ; Disable for sure.
+  ;; Disable for sure.
   (if writer-mode
       (writer-mode -1))
 
-  ; And finally kill this buffer. This is safe because all variables are local.
+  ;; And finally kill this buffer. This is safe because all variables are local.
   (kill-this-buffer))
-
-; Setup writer-mode in the [f5] key for org-mode, which is free.
-(with-eval-after-load 'org
-  (define-key org-mode-map [f5] #'writer-mode))
 
 (provide 'writer)
 
