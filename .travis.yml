@@ -22,4 +22,4 @@ install:
   - go get -u github.com/vbatts/git-validation
 
 script:
-  - make test
+  - chmod +x ./t/ci.sh && ./t/ci.sh
