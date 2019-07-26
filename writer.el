@@ -90,7 +90,7 @@ https://emacs.stackexchange.com/a/9532, which has been written by Dan.
 I've added the integration with `writer-jump-to-first-headline'."
   (interactive)
 
-  ;; Quit writeroom-mode if we are in it.
+  ;; Quit 'writeroom-mode' if we are in it.
   (when (bound-and-true-p writeroom-mode)
     (writer-room-quit))
 
@@ -148,7 +148,7 @@ I've added the integration with `writer-jump-to-first-headline'."
 ;;; writeroom integration
 
 (defun writer-room ()
-  "Check some assumptions and enter writeroom-mode."
+  "Check some assumptions and enter 'writeroom-mode'."
   (interactive)
 
   (unless writer--room-available
@@ -157,19 +157,19 @@ I've added the integration with `writer-jump-to-first-headline'."
     (writeroom-mode 1)))
 
 (defun writer--room-force-quit (msg)
-  "Quit writeroom-mode and leave an error message as provided by `MSG'."
+  "Quit 'writeroom-mode' and leave an error message as provided by `MSG'."
   (when (fboundp 'writeroom-mode)
     (writeroom-mode -1))
   (writer-error-and-disable msg))
 
 (defun writer-room-quit ()
-  "Gracefully quit writeroom-mode and leave things as they were before entering."
+  "Gracefully quit 'writeroom-mode' and leave things as they were before entering."
   (interactive)
 
   (let ((buf (buffer-base-buffer))
         (cur (current-buffer)))
 
-    ;; First of all, quit writeroom mode.
+    ;; First of all, quit 'writeroom-mode'.
     (when (fboundp 'writeroom-mode)
       (writeroom-mode -1))
 

@@ -70,7 +70,7 @@ git-validation:
 ifeq (, $(shell which git-validation 2> /dev/null))
 	@echo "You don't have 'git-validation' installed, consider installing it (see the CONTRIBUTING.org file)."
 else
-	@git-validation -q -range b910b01ecc0c..HEAD
+	@git-validation -q -range b910b01ecc0c..HEAD -travis-pr-only=false
 endif
 
 .PHONY: unit-test
