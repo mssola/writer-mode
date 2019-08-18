@@ -66,10 +66,10 @@ $ make unit-test
 
 **** Interactive vs non-interactive tests
 
-As you will notice when writing tests, there are two types of tests: interactive
-and non-interactive tests. Non-interactive tests are those that can be run by
-GNU Emacs with the =--batch= flag. That is, these are tests which do not
-interact with the UI in any way. Interactive tests are not run with this
+As you will notice when writing tests, there are two types of unit tests:
+interactive and non-interactive tests. Non-interactive tests are those that can
+be run by GNU Emacs with the =--batch= flag. That is, these are tests which do
+not interact with the UI in any way. Interactive tests are not run with this
 flag. You can run each kind of tests like this:
 
 #+BEGIN_SRC bash
@@ -82,9 +82,6 @@ $ make unit-test-interactive
 # Run interactive tests but do not kill GNU Emacs in the end. This is useful for
 # debugging purposes.
 $ WRITER_NO_EXIT=t make unit-test-interactive
-
-# Run all unit tests
-$ make unit-test
 #+END_SRC
 
 ** Issue reporting
