@@ -1,4 +1,7 @@
 *~
 *.elc
 writer-mode-autoloads.el
+t/t-autoloads.el
+t/tmp/*
 vendor/*.el
+vendor/org-mode

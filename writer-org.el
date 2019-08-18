@@ -30,7 +30,7 @@
 
 ;;; Code:
 
-(require 'org)
+(require 'org-element)
 
 ;;; Utils
 

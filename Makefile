@@ -1,34 +1,25 @@
 # This Makefile has largely been taken by looking at the corresponding Makefiles
 # from the Magit and the cider projects.
 
-TOP := $(dir $(lastword $(MAKEFILE_LIST)))
-LOAD_PATH = -L $(TOP) -L $(TOP)vendor
+TOP := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+LOAD_PATH = -L $(TOP) -L $(TOP)vendor -L $(TOP)vendor/org-mode/lisp
+TEST_LOAD_PATH = -L $(TOP)t
 PKG = writer-mode
 
 ELS_ALL = $(wildcard *.el)
 ELS = $(filter-out $(PKG)-autoloads.el,$(ELS_ALL))
+TESTS_ELS_ALL = $(wildcard t/*.el)
+TESTS_ELS = $(filter-out t/t-autoloads.el,$(TESTS_ELS_ALL))
+TESTS_ELS_NO_DIR = $(notdir $(TESTS_ELS))
 OBJECTS = $(ELS:.el=.elc)
 
 EMACS ?= emacs
 BATCH = $(EMACS) -Q --batch $(LOAD_PATH)
 
-# TODO ???? There's also the shut-up package
-define suppress_warnings
-(fset 'original-message (symbol-function 'message))
-(fset 'message ;'
-      (lambda (f &rest a)
-        (unless (or (equal f "Wrote %s")
-                    (equal f "pcase-memoize: equal first branch, yet different")
-                    (and (equal f "Warning: Unknown defun property `%S' in %S")
-                         (memq (car a) '(pure side-effect-free interactive-only))))
-          (apply 'original-message f a))))
-endef
-export suppress_warnings
-
 ##
 # General
 
-all: test
+all: clean test
 
 .PHONY: version
 version:
@@ -36,7 +27,7 @@ version:
 
 .PHONY: clean
 clean:
-	@rm -f elpa-$(EMACS) $(OBJECTS) $(PKG)-autoloads.el? $(TOP)vendor/*
+	@rm -rf elpa-$(EMACS) $(OBJECTS) $(PKG)-autoloads.el? $(TOP)vendor/* $(TOP)t/*.elc $(TOP)t/t-autoloads.el $(TOP)t/tmp/*
 
 ##
 # Test
@@ -61,9 +52,15 @@ endif
 ifeq ("$(wildcard $(TOP)vendor/olivetti.el)","")
 	@wget -q -O vendor/olivetti.el https://raw.githubusercontent.com/rnkn/olivetti/master/olivetti.el
 endif
+ifeq ("$(wildcard $(TOP)vendor/dash.el)","")
+	@wget -q -O vendor/dash.el https://raw.githubusercontent.com/magnars/dash.el/master/dash.el
+endif
+ifeq ("$(wildcard $(TOP)vendor/org-mode)","")
+	@cd vendor && git clone https://code.orgmode.org/bzg/org-mode && cd org-mode && make autoloads
+endif
 
 .PHONY: test
-test: lint git-validation unit-test
+test: vendor lint git-validation unit-test
 
 .PHONY: git-validation
 git-validation:
@@ -74,18 +71,29 @@ else
 endif
 
 .PHONY: unit-test
-unit-test: version
-	@$(BATCH) --eval "(progn\
-	(load-file \"t/writer-tests.el\")\
-	(ert-run-tests-batch-and-exit))"
+unit-test: version unit-test-non-interactive unit-test-interactive
+
+.PHONY: unit-test-non-interactive
+unit-test-non-interactive:
+	@$(BATCH) $(TEST_LOAD_PATH) -l ert -l t/writer-tests.el -f ert-run-tests-batch-and-exit
+
+.PHONY: unit-test-interactive
+unit-test-interactive:
+	@rm -f $(TOP)t/tmp/interactive-results.txt $(TOP)t/*.elc $(TOP)t/t-autoloads.el
+	@$(EMACS) -Q $(LOAD_PATH) $(TEST_LOAD_PATH) -nw -l t/writer-interactive-tests -f writer-interactive-tests-run
+	@cat $(TOP)t/tmp/interactive-results.txt
 
 .PHONY: lint
-lint: version vendor elisp-lint package-lint
+lint: version elisp-lint package-lint
 
 .PHONY: elisp-lint
 elisp-lint:
 	@$(BATCH) -l elisp-lint.el -f elisp-lint-files-batch $(ELS)
+# For some reason `elisp-lint` fails if we put $(TEST_ELS) inside of
+# $(ELS). Thus, we have to actually move into the `t` directory and execute the
+# same thing again but with $(TESTS_ELS_NO_DIR).
+	@cd t && $(BATCH) -l elisp-lint.el -f elisp-lint-files-batch $(TESTS_ELS_NO_DIR)
 
 .PHONY: package-lint
 package-lint:
-	@$(BATCH) -l package-lint.el -f package-lint-batch-and-exit $(ELS)
+	@$(BATCH) -l package-lint.el -f package-lint-batch-and-exit $(ELS) $(TESTS_ELS)

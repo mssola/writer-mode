@@ -27,6 +27,7 @@ cd "$( cd "$( dirname "$0" )/.." && pwd )"
 if [ "$EVM_EMACS" = "emacs-25.1-travis" ] ||
        [ "$EVM_EMACS" = "emacs-25.2-travis" ] ||
        [ "$EVM_EMACS" = "emacs-25.3-travis" ]; then
+    make vendor
     make git-validation
     make unit-test
 else

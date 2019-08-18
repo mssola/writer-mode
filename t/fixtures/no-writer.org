@@ -1,0 +1,10 @@
+#+TITLE: Test
+#+PROPERTY: lang:ca
+
+* Section
+
+This is another test
+
+** Subsection
+
+Text on the subsection
