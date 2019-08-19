@@ -27,7 +27,7 @@ version:
 
 .PHONY: clean
 clean:
-	@rm -rf elpa-$(EMACS) $(OBJECTS) $(PKG)-autoloads.el? $(TOP)vendor/* $(TOP)t/*.elc $(TOP)t/t-autoloads.el $(TOP)t/tmp/*
+	@rm -rf elpa-$(EMACS) $(OBJECTS) $(PKG)-autoloads.el* $(TOP)vendor/* $(TOP)t/*.elc $(TOP)t/t-autoloads.el $(TOP)t/tmp/*
 
 ##
 # Test
