@@ -96,4 +96,9 @@ elisp-lint:
 
 .PHONY: package-lint
 package-lint:
+# HACK: this ugly `sed` command is to workaround a problem of package-lint and
+# GNU Emacs 26.x where package-lint doesn't seem to know about org-mode, even
+# though all the test suite is fine and (package-install 'org) warns us that
+# it's already installed.
+	@sed -i 's| (org "9.1")||g' writer.el writer-notes.el writer-org.el
 	@$(BATCH) -l package-lint.el -f package-lint-batch-and-exit $(ELS) $(TESTS_ELS)
