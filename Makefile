@@ -56,7 +56,7 @@ ifeq ("$(wildcard $(TOP)vendor/dash.el)","")
 	@wget -q -O vendor/dash.el https://raw.githubusercontent.com/magnars/dash.el/master/dash.el
 endif
 ifeq ("$(wildcard $(TOP)vendor/org-mode)","")
-	@cd vendor && git clone https://code.orgmode.org/bzg/org-mode && cd org-mode && make autoloads
+	@cd vendor && git clone -b 'release_9.1.14' --depth 1 https://code.orgmode.org/bzg/org-mode && cd org-mode && make autoloads
 endif
 
 .PHONY: test
