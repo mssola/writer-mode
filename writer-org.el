@@ -4,8 +4,8 @@
 ;;
 ;; Author: Miquel Sabaté Solà <mikisabate@gmail.com>
 ;; Version: 0.1
-;; Package-Requires: ((emacs "25.1"))
-;; Keywords: convenience files wp
+;; Package-Requires: ((emacs "25.1") (org "9.1"))
+;; Keywords: convenience, files, wp
 ;; URL: https://github.com/mssola/writer-mode
 ;;
 ;; This file is not part of GNU Emacs.

@@ -53,14 +53,16 @@ Read the [[./CHANGELOG.org][CHANGELOG.org]] file.
 ** Appreciation
 
 Thanks to [[https://github.com/frankjonen][@frankjonen]] for working on [[https://github.com/frankjonen/emacs-for-writers/][Emacs for Writers]]. This mode was developed
-before he released this code, but out of frustration I abandoned this project
+before he released his code, but out of frustration I abandoned this project
 before it was finished. I retook the development for this project after he
 submitted his code, after reconsidering some doubts that I was having. Moreover,
 I also took some ideas from him (e.g. notes section).
 
-Last but not least, thank you to all the GNU Emacs developers for providing such
-a wonderful tool, and its ecosystem for providing useful packages such as
-[[https://github.com/rnkn/olivetti][olivetti]] or [[https://github.com/joostkremers/writeroom-mode][writeroom-mode]].
+Finally, thank you to all the GNU Emacs developers for providing such a
+wonderful tool, and its ecosystem for providing useful packages such as [[https://github.com/rnkn/olivetti][olivetti]]
+or [[https://github.com/joostkremers/writeroom-mode][writeroom-mode]]. Last but not least, the project structure is heavily
+influenced by mature projects such as [[https://www.projectile.mx/en/latest/][projectile]], [[https://magit.vc/][magit]] and [[https://orgmode.org/][org mode]]. Thanks a
+bunch for doing such a remarkable job!
 
 ** License
 

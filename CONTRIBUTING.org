@@ -12,8 +12,8 @@ it by performing:
 $ make vendor
 #+END_SRC
 
-Note though that you should never have to do this, since it will be already done
-by other tasks automatically.
+The =vendor= task is already called by top-level tasks such as =all= (the
+default task) and =test=.
 
 If you want to run everything, just execute:
 
@@ -32,9 +32,6 @@ can run these checkers by performing:
 #+BEGIN_SRC bash
 $ make lint
 #+END_SRC
-
-Note that the =lint= task already calls the =vendor= one, so you don't have to
-fetch these dependencies beforehand, it will be handled for you.
 
 *** Git validation
 

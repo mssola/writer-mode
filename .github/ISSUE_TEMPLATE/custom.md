@@ -1,7 +1,14 @@
+---
+name: Custom issue template
+about: General issues, both bugs and features.
+title: ''
+labels: ''
+assignees: mssola
+---
+
 ### Description
 
-Check out the [contribution guidelines](../CONTRIBUTING.org) file for some
-considerations before submitting a new issue.
+Check out the [contribution guidelines](../CONTRIBUTING.org) file for some considerations before submitting a new issue.
 
 ### Steps to reproduce
 
@@ -26,6 +33,4 @@ GNU Emacs 26.2 (build 1, x86_64-suse-linux-gnu, GTK+ Version 3.22.30)
 
 ### Operating system
 
-The operating system and the exact version you are using. If you are using
-Linux, it may be useful to know which distribution you are using and what did
-you do in order to install GNU Emacs.
+The operating system and the exact version you are using. If you are using Linux, it may be useful to know which distribution you are using and what did you do in order to install GNU Emacs.

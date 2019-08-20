@@ -4,8 +4,8 @@
 ;;
 ;; Author: Miquel Sabaté Solà <mikisabate@gmail.com>
 ;; Version: 0.1
-;; Package-Requires: ((emacs "25.1"))
-;; Keywords: convenience files wp
+;; Package-Requires: ((emacs "25.1") (org "9.1"))
+;; Keywords: convenience, files, wp
 ;; URL: https://github.com/mssola/writer-mode
 ;;
 ;; This file is not part of GNU Emacs.
@@ -28,6 +28,8 @@
 ;; Code for handling the notes section.
 ;;
 ;;; Code:
+
+(require 'windmove)
 
 (defcustom writer-notes-post-hook nil
   "Hook run just *after* setting up the notes section.
