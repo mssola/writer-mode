@@ -1,0 +1,4 @@
+#+TITLE: Test
+#+PROPERTY: writer-mode:t lang:ca
+
+This is a test

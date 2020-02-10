@@ -1,0 +1,6 @@
+#+TITLE: Main file
+#+PROPERTY: writer-main-file:t writer-mode:t lang:ca
+
+This is the main file test, which includes:
+
+#+INCLUDE: "./test.org"

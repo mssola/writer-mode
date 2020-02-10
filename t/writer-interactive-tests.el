@@ -1,6 +1,6 @@
 ;;; writer-interactive-tests.el --- Interactive tests for writer-mode -*- lexical-binding: t; -*-
 ;;
-;; Copyright (C) 2019 Miquel Sabaté Solà <mikisabate@gmail.com>
+;; Copyright (C) 2019-2020 Miquel Sabaté Solà <mikisabate@gmail.com>
 ;;
 ;; Author: Miquel Sabaté Solà <mikisabate@gmail.com>
 ;; Version: 0.1

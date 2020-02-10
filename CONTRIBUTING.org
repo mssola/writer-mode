@@ -4,18 +4,16 @@
 
 ** Running tests
 
-This package has a couple of dependencies in order to run tests. These
-dependencies will be picked up directly by the =vendor= make task. You can run
-it by performing:
+There are a couple of dependencies in order to run tests. These dependencies
+will be picked up directly by the =vendor= make task. You can run it by
+performing:
 
 #+BEGIN_SRC bash
 $ make vendor
 #+END_SRC
 
 The =vendor= task is already called by top-level tasks such as =all= (the
-default task) and =test=.
-
-If you want to run everything, just execute:
+default task) and =test=. If you want to run everything, just execute:
 
 #+BEGIN_SRC bash
 $ make
@@ -26,8 +24,8 @@ tests, among other things. See the sections below to read more about them.
 
 *** Checking the style
 
-This package uses [[https://github.com/gonewest818/elisp-lint][elisp-lint]] and [[https://github.com/purcell/package-lint][package-lint]] in order to check the style. You
-can run these checkers by performing:
+The [[https://github.com/gonewest818/elisp-lint][elisp-lint]] and [[https://github.com/purcell/package-lint][package-lint]] packages are being used for checking the
+style. You can run these checkers by performing:
 
 #+BEGIN_SRC bash
 $ make lint

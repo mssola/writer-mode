@@ -1,6 +1,6 @@
 ;;; writer-tests.el --- Tests for writer-mode -*- lexical-binding: t; -*-
 ;;
-;; Copyright (C) 2019 Miquel Sabaté Solà <mikisabate@gmail.com>
+;; Copyright (C) 2019-2020 Miquel Sabaté Solà <mikisabate@gmail.com>
 ;;
 ;; Author: Miquel Sabaté Solà <mikisabate@gmail.com>
 ;; Version: 0.1
@@ -34,6 +34,7 @@
 (require 'ert)
 
 (require 'writer)
+(require 'writer-org)
 (require 'writer-tests-utils)
 
 
@@ -60,6 +61,72 @@
 
   (should (equal major-mode 'org-mode))
   (should (null (-contains? (writer-tests-utils-which-active-modes) 'writer-mode))))
+
+
+;;; Exporting main file
+
+
+(ert-deftest writer-tests-org-export-to-pdf ()
+  "When visiting an ORG file and calling `writer-org-export-to-pdf', the PDF is produced and all the
+clutter has been removed."
+
+  ;; Make sure that the out directory does not exist.
+  (delete-directory (concat default-directory "t/fixtures/out") t)
+
+  (writer-tests-utils-visit-fixture
+    "test.org"
+    (setq writer-forced t)
+    (setq writer-notes-hidden t))
+
+  (writer-org-export-to-pdf)
+
+  ;; No crap, we only have the PDF.
+  (should (null (directory-files default-directory t ".tex$")))
+  (should (file-exists-p (concat default-directory "out/test.pdf")))
+
+  ;; Clean up
+  (delete-directory (concat default-directory "out") t))
+
+(ert-deftest writer-tests-org-export-to-odt ()
+  "When visiting an ORG file and calling `writer-org-export-to-odt', the PDF is produced and all the
+clutter has been removed."
+
+  ;; Make sure that the out directory does not exist.
+  (delete-directory (concat default-directory "t/fixtures/out") t)
+
+  (writer-tests-utils-visit-fixture
+    "test.org"
+    (setq writer-forced t)
+    (setq writer-notes-hidden t))
+
+  (writer-org-export-to-odt)
+
+  ;; No crap, we only have the ODT.
+  (should (file-exists-p (concat default-directory "out/test.odt")))
+
+  ;; Clean up
+  (delete-directory (concat default-directory "out") t))
+
+(ert-deftest writer-tests-org-export-main-file-to-pdf ()
+  "When visiting an ORG file and calling `writer-org-export-to-pdf', the PDF
+produced is based on the main file."
+
+  ;; Make sure that the out directory does not exist.
+  (delete-directory (concat default-directory "t/fixtures/project/out") t)
+
+  (writer-tests-utils-visit-fixture
+    "project/test.org"
+    (setq writer-forced t)
+    (setq writer-notes-hidden t))
+
+  (writer-org-export-to-pdf)
+
+  ;; No crap, we only have the PDF.
+  (should (null (directory-files default-directory t ".tex$")))
+  (should (file-exists-p (concat default-directory "out/main.pdf")))
+
+  ;; Clean up
+  (delete-directory (concat default-directory "out") t))
 
 
 ;;; writeroom-mode
