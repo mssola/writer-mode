@@ -101,4 +101,13 @@ package-lint:
 # though all the test suite is fine and (package-install 'org) warns us that
 # it's already installed.
 	@sed -i 's| (org "9.1")||g' writer.el writer-notes.el writer-org.el
+# HACK: God knows why this file is needed, but an empty expression makes
+# package-lint shut up.
+	@mkdir -p vendor/data
+	@echo "()" > vendor/data/stdlib-changes
 	@$(BATCH) -l package-lint.el -f package-lint-batch-and-exit $(ELS) $(TESTS_ELS)
+
+.PHONY: latex-check
+latex-check:
+	@$(BATCH) t/fixtures/test.org -f org-latex-export-to-latex --kill
+	@pdflatex -halt-on-error t/fixtures/test.tex

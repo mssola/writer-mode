@@ -119,13 +119,14 @@ killed when we are done.  This function returns the return value of FN."
 ;;; Exporting to PDF and ODT.
 
 (defun writer-org--move-file-to-out (dir name ext)
-  "If the given file NAME exists, move it out from DIR.
+  "Move out from DIR the given file NAME if it exists.
 Note that EXT must include the period character."
 
   (when (file-exists-p (concat dir name ext))
     (unless (file-directory-p (concat dir "out/"))
       (make-directory (concat dir "out/")))
-    (delete-file (concat dir "out/" name ext))
+    (when (file-exists-p (concat dir "out/" name ext))
+      (delete-file (concat dir "out/" name ext)))
     (rename-file (concat dir name ext) (concat dir "out/" name ext))))
 
 (defun writer-org--export-buffer-to-pdf (buffer)
@@ -136,9 +137,11 @@ Note that EXT must include the period character."
 
     (let* ((fn (buffer-file-name buffer))
            (dir (file-name-directory fn))
-           (name (file-name-base fn)))
+           (name (file-name-base fn))
+           (autodir (concat dir "auto")))
 
-      (delete-directory (concat dir "auto") t)
+      (when (file-directory-p autodir)
+        (delete-directory autodir t))
 
       (when (file-exists-p (concat dir name ".tex"))
         (delete-file (concat dir name ".tex")))

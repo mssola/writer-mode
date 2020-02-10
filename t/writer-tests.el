@@ -71,7 +71,9 @@
 clutter has been removed."
 
   ;; Make sure that the out directory does not exist.
-  (delete-directory (concat default-directory "t/fixtures/out") t)
+  (let ((dir (concat default-directory "t/fixtures/out")))
+    (when (file-directory-p dir)
+      (delete-directory dir t)))
 
   (writer-tests-utils-visit-fixture
     "test.org"
@@ -92,7 +94,9 @@ clutter has been removed."
 clutter has been removed."
 
   ;; Make sure that the out directory does not exist.
-  (delete-directory (concat default-directory "t/fixtures/out") t)
+  (let ((dir (concat default-directory "t/fixtures/out")))
+    (when (file-directory-p dir)
+      (delete-directory dir t)))
 
   (writer-tests-utils-visit-fixture
     "test.org"
@@ -112,7 +116,9 @@ clutter has been removed."
 produced is based on the main file."
 
   ;; Make sure that the out directory does not exist.
-  (delete-directory (concat default-directory "t/fixtures/project/out") t)
+  (let ((dir (concat default-directory "t/fixtures/out")))
+    (when (file-directory-p dir)
+      (delete-directory dir t)))
 
   (writer-tests-utils-visit-fixture
     "project/test.org"

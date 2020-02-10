@@ -1,25 +1,15 @@
-dist: trusty
-sudo: false
-language: go
+language: nix
+sudo: true
 
 env:
-  matrix:
-    - EVM_EMACS=emacs-25.1-travis
-    - EVM_EMACS=emacs-25.2-travis
-    - EVM_EMACS=emacs-25.3-travis
-    - EVM_EMACS=emacs-26.1-travis
-    - EVM_EMACS=emacs-26.2-travis
-    - EVM_EMACS=emacs-git-snapshot-travis
-  allow_failures:
-    - env: EVM_EMACS=emacs-git-snapshot-travis
+  - EMACS_CI=emacs-25-3
+  - EMACS_CI=emacs-26-3
+  - EMACS_CI=emacs-snapshot
 
 install:
-  - export PATH=/home/travis/.evm/bin:$PATH
-  - git clone https://github.com/rejeep/evm.git /home/travis/.evm
-  - evm config path /tmp
-  - evm install $EVM_EMACS --use --skip
-
+  - bash <(curl https://raw.githubusercontent.com/purcell/nix-emacs-ci/master/travis-install)
+  - sudo apt-get install texlive-fonts-recommended texlive-latex-extra texlive-latex-recommended texlive-latex-base texlive-generic-recommended golang
   - go get -u github.com/vbatts/git-validation
 
 script:
-  - chmod +x ./t/ci.sh && ./t/ci.sh
+  - make test

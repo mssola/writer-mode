@@ -61,7 +61,7 @@
     active-modes))
 
 (defun writer-tests-utils-more-or-less-p (smaller bigger proportion)
-  "Whether BIGGER is more or less PROPORTION times bigger than SMALLER."
+  "Whether SMALLER is times smaller than BIGGER for the given PROPORTION."
 
   (let ((prod (* smaller proportion)))
     (and (> bigger (- prod 10)) (< bigger (+ prod 10)))))
