@@ -29,6 +29,12 @@ version:
 clean:
 	@rm -rf elpa-$(EMACS) $(OBJECTS) $(PKG)-autoloads.el* $(TOP)vendor/* $(TOP)t/*.elc $(TOP)t/t-autoloads.el* $(TOP)t/tmp/*
 
+.PHONY: build
+build: $(OBJECTS)
+
+$(OBJECTS): %.elc: %.el
+	@$(BATCH) --kill -l bytecomp --eval '(byte-recompile-file (expand-file-name "$(TOP)$<") nil 0)'
+
 ##
 # Test
 
