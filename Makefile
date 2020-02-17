@@ -92,25 +92,29 @@ unit-test-interactive:
 .PHONY: lint
 lint: version elisp-lint package-lint
 
+.PHONY: fix-stdlib-changes
+fix-stdlib-changes:
+# HACK: God knows why this file is needed, but an empty expression makes
+# package-lint shut up.
+	@mkdir -p vendor/data
+	@echo "()" > vendor/data/stdlib-changes
+
 .PHONY: elisp-lint
-elisp-lint:
+elisp-lint: fix-stdlib-changes
 	@$(BATCH) -l elisp-lint.el -f elisp-lint-files-batch $(ELS)
 # For some reason `elisp-lint` fails if we put $(TEST_ELS) inside of
 # $(ELS). Thus, we have to actually move into the `t` directory and execute the
 # same thing again but with $(TESTS_ELS_NO_DIR).
+#
 	@cd t && $(BATCH) -l elisp-lint.el -f elisp-lint-files-batch $(TESTS_ELS_NO_DIR)
 
 .PHONY: package-lint
-package-lint:
+package-lint: fix-stdlib-changes
 # HACK: this ugly `sed` command is to workaround a problem of package-lint and
 # GNU Emacs 26.x where package-lint doesn't seem to know about org-mode, even
 # though all the test suite is fine and (package-install 'org) warns us that
 # it's already installed.
 	@sed -i 's| (org "9.1")||g' writer.el writer-notes.el writer-org.el
-# HACK: God knows why this file is needed, but an empty expression makes
-# package-lint shut up.
-	@mkdir -p vendor/data
-	@echo "()" > vendor/data/stdlib-changes
 	@$(BATCH) -l package-lint.el -f package-lint-batch-and-exit $(ELS) $(TESTS_ELS)
 
 .PHONY: latex-check
